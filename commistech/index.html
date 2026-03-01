@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; 
+             script-src 'self' 'nonce-CT2026x9z'; 
+             style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+             font-src 'self' https://fonts.gstatic.com; 
+             img-src 'self' data: https:; 
+             connect-src 'self'; 
+             frame-ancestors 'none';" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
+
+  <title>Commis Tech | IT Consulting & Cybersecurity Services</title>
+  <meta name="description" content="Commis Tech — 15+ years of personalized IT consulting, AWS partner services, cybersecurity, and digital transformation. Based in Charlotte, NC." />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Commis Tech | IT Consulting & Cybersecurity" />
+  <meta property="og:description" content="Experienced, personalized IT consulting and cybersecurity services for businesses of all sizes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://commistech.com" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ───────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    :root {
+      --bg-0:       #040C1A;
+      --bg-1:       #071325;
+      --bg-2:       #0B1C38;
+      --bg-card:    #0D2040;
+      --accent:     #00C8FF;
+      --accent-dim: #007FA8;
+      --blue:       #1A6FFF;
+      --blue-dark:  #0A3A99;
+      --text-hi:    #EDF2FF;
+      --text-mid:   #8BA3C7;
+      --text-lo:    #4D6080;
+      --border:     rgba(0,200,255,0.12);
+      --border-hi:  rgba(0,200,255,0.35);
+      --glow:       0 0 40px rgba(0,200,255,0.15);
+      --glow-hi:    0 0 60px rgba(0,200,255,0.35);
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+      --radius:     12px;
+      --radius-lg:  20px;
+      --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    body {
+      background: var(--bg-0);
+      color: var(--text-hi);
+      font-family: var(--font-body);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: rgba(0,200,255,0.25); color: #fff; }
+
+    /* ─── SCROLLBAR ──────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-0); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 3px; }
+
+    /* ─── NOISE TEXTURE OVERLAY ──────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ─── TYPOGRAPHY ─────────────────────────────────── */
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: clamp(2.4rem, 5.5vw, 4.5rem); font-weight: 800; }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 700; }
+    h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 600; }
+    p  { color: var(--text-mid); font-size: 1.05rem; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── LAYOUT ─────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    section { padding: 100px 0; }
+
+    /* ─── SECTION LABEL ──────────────────────────────── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ─── BUTTONS ────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg-0);
+    }
+    .btn-primary:hover {
+      background: #33D5FF;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,200,255,0.35);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-hi);
+      border: 1px solid var(--border-hi);
+    }
+    .btn-outline:hover {
+      background: rgba(0,200,255,0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ─── NAV ────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 24px;
+      transition: var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(4,12,26,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-hi);
+      letter-spacing: -0.03em;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-hi); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta { margin-left: 16px; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-hi);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(4,12,26,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-hi);
+      transition: color var(--transition);
+    }
+    .mobile-menu a:hover { color: var(--accent); }
+    .mobile-close {
+      position: absolute;
+      top: 24px; right: 24px;
+      background: none; border: none;
+      color: var(--text-hi);
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ─── HERO ───────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+
+    /* Animated gradient orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.2;
+      animation: drift 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #00C8FF, transparent);
+      top: -200px; left: -150px;
+      animation-delay: 0s;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #1A6FFF, transparent);
+      bottom: -100px; right: -100px;
+      animation-delay: -7s;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, #00C8FF, transparent);
+      top: 50%; right: 20%;
+      animation-delay: -14s;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(30px, -40px) scale(1.05); }
+      66%       { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    /* Grid pattern */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,200,255,0.1);
+      border: 1px solid var(--border-hi);
+      border-radius: 50px;
+      padding: 6px 16px 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      display: block;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      max-width: 820px;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+    .hero-title .line-accent { color: var(--accent); }
+    .hero-title .line-dim { color: var(--text-mid); }
+
+    .hero-subtitle {
+      max-width: 540px;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 24px 0 40px;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 72px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+    .stat-item {}
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-hi);
+      line-height: 1;
+    }
+    .stat-number span { color: var(--accent); }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-lo);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── MARQUEE ────────────────────────────────────── */
+    .marquee-section {
+      padding: 28px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--bg-1);
+    }
+    .marquee-track {
+      display: flex;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 40px;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+      white-space: nowrap;
+    }
+    .marquee-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── SERVICES ───────────────────────────────────── */
+    #services { background: var(--bg-1); }
+
+    .services-header {
+      max-width: 600px;
+      margin-bottom: 60px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .service-card:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-6px);
+      box-shadow: var(--glow);
+    }
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      width: 52px; height: 52px;
+      background: rgba(0,200,255,0.1);
+      border: 1px solid var(--border-hi);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 1.4rem;
+    }
+
+    .service-card h3 {
+      margin-bottom: 12px;
+    }
+    .service-card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .service-list {
+      list-style: none;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .service-list li {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      padding-left: 18px;
+      position: relative;
+    }
+    .service-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+      font-family: var(--font-display);
+      transition: gap var(--transition);
+    }
+    .service-link:hover { gap: 12px; }
+
+    /* Featured service card */
+    .service-card.featured {
+      background: linear-gradient(135deg, #071A3E, #0B2555);
+      border-color: rgba(0,200,255,0.3);
+      grid-column: span 1;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────── */
+    #about {
+      background: var(--bg-0);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-visual-inner {
+      background: linear-gradient(135deg, var(--bg-2), var(--bg-card));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-visual-inner::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(0,200,255,0.15), transparent);
+      border-radius: 50%;
+    }
+
+    .about-metric {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .metric-box {
+      background: rgba(0,200,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+    }
+    .metric-box .number {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .metric-box .label {
+      font-size: 0.8rem;
+      color: var(--text-lo);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .about-content { }
+    .about-content h2 { margin-bottom: 20px; }
+    .about-content p { margin-bottom: 16px; }
+
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .feature-icon {
+      width: 40px; height: 40px;
+      min-width: 40px;
+      background: rgba(0,200,255,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .feature-text h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .feature-text p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    /* ─── PROCESS ────────────────────────────────────── */
+    #process { background: var(--bg-1); }
+    .process-header {
+      max-width: 600px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+    .process-header h2 { margin-bottom: 16px; }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: calc(12.5% + 16px);
+      right: calc(12.5% + 16px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+      z-index: 0;
+    }
+
+    .step-card {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .step-number {
+      width: 64px; height: 64px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hi);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      transition: var(--transition);
+    }
+    .step-card:hover .step-number {
+      background: var(--accent);
+      color: var(--bg-0);
+      box-shadow: var(--glow-hi);
+    }
+    .step-card h3 { margin-bottom: 10px; }
+    .step-card p { font-size: 0.9rem; }
+
+    /* ─── INDUSTRIES ─────────────────────────────────── */
+    #industries { background: var(--bg-0); }
+    .industries-header { max-width: 600px; margin-bottom: 56px; }
+
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .industry-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: default;
+    }
+    .industry-chip:hover {
+      border-color: var(--border-hi);
+      background: rgba(0,200,255,0.06);
+      transform: translateY(-4px);
+    }
+    .industry-emoji { font-size: 1.8rem; display: block; margin-bottom: 10px; }
+    .industry-chip span:last-child {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      font-family: var(--font-display);
+    }
+
+    /* ─── TESTIMONIALS ───────────────────────────────── */
+    #testimonials { background: var(--bg-1); }
+    .testimonials-header { max-width: 600px; margin-bottom: 56px; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: var(--transition);
+    }
+    .testimonial-card:hover {
+      border-color: var(--border-hi);
+      transform: translateY(-4px);
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .testimonial-text {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      font-style: italic;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-dim), var(--blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+    }
+    .author-info .name {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-hi);
+    }
+    .author-info .role {
+      font-size: 0.8rem;
+      color: var(--text-lo);
+    }
+
+    /* ─── CTA BANNER ─────────────────────────────────── */
+    #cta {
+      background: var(--bg-0);
+      padding: 80px 0;
+    }
+    .cta-box {
+      background: linear-gradient(135deg, #071A3E 0%, #041028 50%, #071A3E 100%);
+      border: 1px solid rgba(0,200,255,0.25);
+      border-radius: 24px;
+      padding: 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,200,255,0.12), transparent);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .cta-box h2 { margin-bottom: 16px; }
+    .cta-box p { max-width: 520px; margin: 0 auto 36px; font-size: 1.1rem; }
+    .cta-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── CONTACT ────────────────────────────────────── */
+    #contact { background: var(--bg-1); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-info h2 { margin-bottom: 16px; }
+    .contact-info p { margin-bottom: 32px; }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      background: rgba(0,200,255,0.1);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .contact-item-text .label {
+      font-size: 0.78rem;
+      color: var(--text-lo);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .contact-item-text .value {
+      color: var(--text-hi);
+      font-weight: 500;
+    }
+
+    /* ─── FORM ───────────────────────────────────────── */
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      font-family: var(--font-display);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text-hi);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      width: 100%;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-lo);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,200,255,0.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group select option { background: var(--bg-1); }
+
+    .form-notice {
+      font-size: 0.8rem;
+      color: var(--text-lo);
+      margin-top: 12px;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: var(--bg-0);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 32px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .footer-brand .logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-hi);
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+    .footer-brand .logo span { color: var(--accent); }
+    .footer-brand p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+    .social-btn {
+      width: 38px; height: 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: var(--transition);
+      color: var(--text-mid);
+    }
+    .social-btn:hover {
+      border-color: var(--border-hi);
+      background: rgba(0,200,255,0.1);
+      color: var(--accent);
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-hi);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col ul a {
+      font-size: 0.88rem;
+      color: var(--text-lo);
+      transition: color var(--transition);
+    }
+    .footer-col ul a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-bottom p {
+      font-size: 0.82rem;
+      color: var(--text-lo);
+      margin: 0;
+    }
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-legal a {
+      font-size: 0.82rem;
+      color: var(--text-lo);
+      transition: color var(--transition);
+    }
+    .footer-legal a:hover { color: var(--accent); }
+
+    /* ─── BACK TO TOP ────────────────────────────────── */
+    .back-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 46px; height: 46px;
+      background: var(--accent);
+      color: var(--bg-0);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+      z-index: 500;
+    }
+    .back-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .back-top:hover { transform: translateY(-4px); box-shadow: var(--glow-hi); }
+
+    /* ─── SUCCESS MESSAGE ────────────────────────────── */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 32px;
+    }
+    .form-success .check {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+    .form-success h3 { margin-bottom: 8px; }
+    .form-success p { font-size: 0.95rem; }
+
+    /* ─── REVEAL ANIMATIONS ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+      .industries-grid { grid-template-columns: repeat(3, 1fr); }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .about-grid { gap: 48px; }
+    }
+    @media (max-width: 768px) {
+      section { padding: 72px 0; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .services-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { gap: 28px; flex-wrap: wrap; }
+      .industries-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .cta-box { padding: 40px 24px; }
+      .contact-grid { gap: 40px; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .industries-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVIGATION ─────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="Commis Tech Home">Commis<span>Tech</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#industries">Industries</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-primary nav-cta" aria-label="Book a consultation">Book Consultation</a>
+    <button class="hamburger" id="menuBtn" aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ─── MOBILE MENU ────────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <button class="mobile-close" id="menuClose" aria-label="Close navigation menu">✕</button>
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#process" class="mobile-link">Process</a>
+  <a href="#industries" class="mobile-link">Industries</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+  <a href="#contact" class="btn btn-primary" style="margin-top:16px">Book Consultation</a>
+</div>
+
+<!-- ─── HERO ───────────────────────────────────────── -->
+<section id="hero" aria-label="Hero">
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+  <div class="hero-content container">
+    <div class="hero-badge" aria-label="AWS Advanced Consulting Partner">AWS Advanced Consulting Partner</div>
+    <h1 class="hero-title">
+      <span class="line-dim">Intelligent IT Solutions</span><br />
+      <span class="line-accent">Built for Modern Business</span>
+    </h1>
+    <p class="hero-subtitle">
+      15+ years of personalized IT consulting, cybersecurity, cloud transformation, and AI-powered solutions — tailored to your business goals.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-primary">Get a Free Consultation →</a>
+      <a href="#services" class="btn btn-outline">Explore Services</a>
+    </div>
+    <div class="hero-stats" aria-label="Company statistics">
+      <div class="stat-item">
+        <div class="stat-number">15<span>+</span></div>
+        <div class="stat-label">Years of Service</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">200<span>+</span></div>
+        <div class="stat-label">Clients Served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">98<span>%</span></div>
+        <div class="stat-label">Client Retention</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">24<span>/7</span></div>
+        <div class="stat-label">Support Available</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MARQUEE ────────────────────────────────────── -->
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">AWS Partner Services <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Cybersecurity <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Cloud Migration <span class="marquee-dot"></span></span>
+    <span class="marquee-item">AI Development <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Digital Transformation <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Network Security <span class="marquee-dot"></span></span>
+    <span class="marquee-item">IT Consulting <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Database Engineering <span class="marquee-dot"></span></span>
+    <!-- Duplicate for seamless loop -->
+    <span class="marquee-item">AWS Partner Services <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Cybersecurity <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Cloud Migration <span class="marquee-dot"></span></span>
+    <span class="marquee-item">AI Development <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Digital Transformation <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Network Security <span class="marquee-dot"></span></span>
+    <span class="marquee-item">IT Consulting <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Database Engineering <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- ─── SERVICES ──────────────────────────────────── -->
+<section id="services" aria-labelledby="services-heading">
+  <div class="container">
+    <div class="services-header reveal">
+      <div class="section-label">What We Do</div>
+      <h2 id="services-heading">Comprehensive IT Services for Every Business Need</h2>
+      <p style="margin-top:12px">From cloud architecture to cybersecurity and AI development — we deliver end-to-end technology solutions that scale with your ambitions.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card featured reveal">
+        <div class="service-icon" aria-hidden="true">☁️</div>
+        <h3>AWS Partner Services</h3>
+        <p>As a certified AWS Consulting Partner, we architect, migrate, and manage cloud infrastructure with proven best practices.</p>
+        <ul class="service-list">
+          <li>Cloud architecture & migration</li>
+          <li>Cost optimization & FinOps</li>
+          <li>Serverless & container solutions</li>
+          <li>24/7 cloud monitoring & support</li>
+        </ul>
+        <a href="#contact" class="service-link">Learn more →</a>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">🛡️</div>
+        <h3>Cybersecurity Services</h3>
+        <p>Comprehensive security assessments, threat monitoring, and zero-trust architecture to protect your business assets.</p>
+        <ul class="service-list">
+          <li>Vulnerability assessments & pen testing</li>
+          <li>SOC monitoring & incident response</li>
+          <li>Compliance (HIPAA, SOC2, ISO 27001)</li>
+          <li>Security awareness training</li>
+        </ul>
+        <a href="#contact" class="service-link">Learn more →</a>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">⚙️</div>
+        <h3>IT Consulting Services</h3>
+        <p>Strategic technology consulting backed by 15+ years of experience helping businesses align IT with business goals.</p>
+        <ul class="service-list">
+          <li>IT strategy & roadmap planning</li>
+          <li>Technology gap analysis</li>
+          <li>Project management & delivery</li>
+          <li>Vendor management & procurement</li>
+        </ul>
+        <a href="#contact" class="service-link">Learn more →</a>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">🤖</div>
+        <h3>AI-Based Development</h3>
+        <p>Custom AI and machine learning solutions that automate processes, surface insights, and create competitive advantage.</p>
+        <ul class="service-list">
+          <li>Custom ML model development</li>
+          <li>LLM integration & RAG pipelines</li>
+          <li>Process automation with AI</li>
+          <li>AI strategy consulting</li>
+        </ul>
+        <a href="#contact" class="service-link">Learn more →</a>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">🔄</div>
+        <h3>Digital Transformation</h3>
+        <p>End-to-end digital transformation programs that modernize legacy systems and accelerate business innovation.</p>
+        <ul class="service-list">
+          <li>Legacy system modernization</li>
+          <li>End-to-end integration</li>
+          <li>DevOps & CI/CD pipelines</li>
+          <li>API design & microservices</li>
+        </ul>
+        <a href="#contact" class="service-link">Learn more →</a>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon" aria-hidden="true">🗄️</div>
+        <h3>Database & Data Engineering</h3>
+        <p>Modern data infrastructure — from warehouse design to real-time analytics — powering data-driven decisions.</p>
+        <ul class="service-list">
+          <li>Data warehouse architecture</li>
+          <li>ETL pipeline development</li>
+          <li>Database optimization & scaling</li>
+          <li>Business intelligence & reporting</li>
+        </ul>
+        <a href="#contact" class="service-link">Learn more →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ──────────────────────────────────────── -->
+<section id="about" aria-labelledby="about-heading">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-visual-inner">
+          <div class="about-metric">
+            <div class="metric-box">
+              <div class="number">15+</div>
+              <div class="label">Years in IT</div>
+            </div>
+            <div class="metric-box">
+              <div class="number">200+</div>
+              <div class="label">Projects Done</div>
+            </div>
+            <div class="metric-box">
+              <div class="number">AWS</div>
+              <div class="label">Certified Partner</div>
+            </div>
+            <div class="metric-box">
+              <div class="number">98%</div>
+              <div class="label">Satisfaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-content reveal">
+        <div class="section-label">About Commis Tech</div>
+        <h2 id="about-heading">Technology Partners Who Understand Your Business</h2>
+        <p>At Commis Tech, our mission is to empower businesses with cutting-edge IT solutions that drive growth and efficiency. We believe in leveraging technology to solve real-world problems and enhance operational performance.</p>
+        <p>Based in Charlotte, NC, we serve clients across industries — from healthcare and finance to retail and manufacturing — delivering personalized strategies that fit your unique environment.</p>
+        <div class="about-features">
+          <div class="feature-item">
+            <div class="feature-icon" aria-hidden="true">🎯</div>
+            <div class="feature-text">
+              <h4>Personalized Approach</h4>
+              <p>No one-size-fits-all. Every engagement starts with a comprehensive assessment of your unique needs and goals.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" aria-hidden="true">📋</div>
+            <div class="feature-text">
+              <h4>Structured Delivery</h4>
+              <p>Detailed project plans with clear timelines, milestones, cost analysis, and transparent communication throughout.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon" aria-hidden="true">🏆</div>
+            <div class="feature-text">
+              <h4>Proven Track Record</h4>
+              <p>15+ years of successful engagements across industries — with counselors committed to your long-term success.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROCESS ────────────────────────────────────── -->
+<section id="process" aria-labelledby="process-heading">
+  <div class="container">
+    <div class="process-header reveal">
+      <div class="section-label">Our Approach</div>
+      <h2 id="process-heading">How We Work With You</h2>
+      <p>A proven four-step engagement model designed to deliver results quickly and transparently.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step-card reveal">
+        <div class="step-number">01</div>
+        <h3>Discovery & Assessment</h3>
+        <p>Comprehensive audit of your current IT landscape, identifying gaps, risks, and growth opportunities.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">02</div>
+        <h3>Strategy & Roadmap</h3>
+        <p>Detailed project plan with timelines, milestones, cost analysis, and prioritized recommendations.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">03</div>
+        <h3>Implementation</h3>
+        <p>Hands-on execution using best-in-class tools, certified engineers, and agile delivery methods.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">04</div>
+        <h3>Optimize & Support</h3>
+        <p>Continuous monitoring, optimization, and 24/7 support to ensure your systems stay ahead of the curve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INDUSTRIES ────────────────────────────────── -->
+<section id="industries" aria-labelledby="industries-heading">
+  <div class="container">
+    <div class="industries-header reveal">
+      <div class="section-label">Industries We Serve</div>
+      <h2 id="industries-heading">Expertise Across Key Sectors</h2>
+    </div>
+    <div class="industries-grid">
+      <div class="industry-chip reveal"><span class="industry-emoji">🏥</span><span>Healthcare</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">🏦</span><span>Financial Services</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">🏭</span><span>Manufacturing</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">🛒</span><span>Retail & E-commerce</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">🎓</span><span>Education</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">⚖️</span><span>Legal & Compliance</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">🏛️</span><span>Government</span></div>
+      <div class="industry-chip reveal"><span class="industry-emoji">🚀</span><span>Startups & SaaS</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ──────────────────────────────── -->
+<section id="testimonials" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <div class="section-label">What Clients Say</div>
+      <h2 id="testimonials-heading">Trusted by Businesses Across the Southeast</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+        <p class="testimonial-text">"Commis Tech transformed our entire cloud infrastructure. Their AWS expertise saved us 40% on hosting costs while significantly improving performance and reliability."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" aria-hidden="true">MR</div>
+          <div class="author-info">
+            <div class="name">Michael R.</div>
+            <div class="role">CTO, Healthcare Analytics Firm</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+        <p class="testimonial-text">"Their cybersecurity assessment uncovered critical vulnerabilities we had no idea existed. The team was professional, thorough, and helped us achieve SOC 2 compliance in record time."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" aria-hidden="true">SL</div>
+          <div class="author-info">
+            <div class="name">Sarah L.</div>
+            <div class="role">CISO, Regional Bank</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
+        <p class="testimonial-text">"The personalized approach made all the difference. They didn't just give us a generic roadmap — they understood our business deeply and delivered exactly what we needed."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" aria-hidden="true">DK</div>
+          <div class="author-info">
+            <div class="name">David K.</div>
+            <div class="role">COO, Manufacturing Company</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ───────────────────────────────────────── -->
+<section id="cta" aria-label="Call to action">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="section-label" style="justify-content:center;display:inline-flex">Ready to Transform Your IT?</div>
+      <h2>Let's Build Your Technology Future Together</h2>
+      <p>Schedule a free consultation and get a comprehensive IT assessment with no obligation. Our experts are ready to help.</p>
+      <div class="cta-actions">
+        <a href="#contact" class="btn btn-primary">Schedule Free Consultation →</a>
+        <a href="tel:9802920332" class="btn btn-outline">📞 (980) 292-0332</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ───────────────────────────────────── -->
+<section id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="section-label">Get In Touch</div>
+        <h2 id="contact-heading">Let's Start a Conversation</h2>
+        <p>Whether you need immediate help or are planning a long-term transformation, our team is here to guide you. Reach out today.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">📞</div>
+            <div class="contact-item-text">
+              <div class="label">Phone</div>
+              <a href="tel:9802920332" class="value">(980) 292-0332</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">📧</div>
+            <div class="contact-item-text">
+              <div class="label">Email</div>
+              <a href="mailto:info@commistech.com" class="value">info@commistech.com</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">📍</div>
+            <div class="contact-item-text">
+              <div class="label">Location</div>
+              <div class="value">Charlotte, NC, United States</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">🕐</div>
+            <div class="contact-item-text">
+              <div class="label">Business Hours</div>
+              <div class="value">Mon–Fri, 9AM–6PM EST</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form reveal" id="contactFormWrapper">
+        <h3 style="margin-bottom:24px;font-family:var(--font-display)">Send Us a Message</h3>
+        <form id="contactForm" novalidate aria-label="Contact form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name *</label>
+              <input type="text" id="firstName" name="firstName" placeholder="John" required
+                maxlength="60" autocomplete="given-name" />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name *</label>
+              <input type="text" id="lastName" name="lastName" placeholder="Smith" required
+                maxlength="60" autocomplete="family-name" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Business Email *</label>
+            <input type="email" id="email" name="email" placeholder="john@company.com" required
+              maxlength="254" autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000"
+              maxlength="20" autocomplete="tel" pattern="[\d\s\-\+\(\)]{7,20}" />
+          </div>
+          <div class="form-group">
+            <label for="service">Service Interested In *</label>
+            <select id="service" name="service" required>
+              <option value="" disabled selected>Select a service...</option>
+              <option value="aws">AWS Partner Services</option>
+              <option value="cybersecurity">Cybersecurity Services</option>
+              <option value="it-consulting">IT Consulting</option>
+              <option value="ai-dev">AI-Based Development</option>
+              <option value="digital-transform">Digital Transformation</option>
+              <option value="data-engineering">Database &amp; Data Engineering</option>
+              <option value="other">Other / General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" placeholder="Tell us about your project or challenge..."
+              required minlength="20" maxlength="2000"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" id="submitBtn">
+            Send Message →
+          </button>
+          <p class="form-notice">By submitting this form, you agree to be contacted by Commis Tech. We respect your privacy and will never share your information.</p>
+        </form>
+        <div class="form-success" id="formSuccess" role="alert" aria-live="polite">
+          <div class="check" aria-hidden="true">✅</div>
+          <h3>Message Received!</h3>
+          <p>Thank you for reaching out. Our team will contact you within 1 business day.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">Commis<span>Tech</span></div>
+        <p>Experienced, personalized IT consulting and cybersecurity services. Building technology strategies that drive real business results.</p>
+        <div class="footer-social" aria-label="Social media links">
+          <a href="#" class="social-btn" aria-label="LinkedIn">in</a>
+          <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
+          <a href="#" class="social-btn" aria-label="Facebook">f</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">AWS Partner Services</a></li>
+          <li><a href="#services">Cybersecurity</a></li>
+          <li><a href="#services">IT Consulting</a></li>
+          <li><a href="#services">AI Development</a></li>
+          <li><a href="#services">Digital Transformation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#process">Our Process</a></li>
+          <li><a href="#industries">Industries</a></li>
+          <li><a href="#" aria-label="Blog - coming soon">Blog / Fireside Chat</a></li>
+          <li><a href="#" aria-label="Careers - coming soon">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:9802920332">(980) 292-0332</a></li>
+          <li><a href="mailto:info@commistech.com">info@commistech.com</a></li>
+          <li><a href="#contact">Book Consultation</a></li>
+          <li><a href="#" aria-label="Privacy policy">Privacy Policy</a></li>
+          <li><a href="#" aria-label="Terms of service">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Commis Tech — All Rights Reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── BACK TO TOP ────────────────────────────────── -->
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+<!-- ─── SCRIPTS ───────────────────────────────────── -->
+<script nonce="CT2026x9z">
+(function () {
+  'use strict';
+
+  /* ── Navbar scroll ── */
+  const navbar = document.getElementById('navbar');
+  const backTop = document.getElementById('backTop');
+  let lastScroll = 0;
+
+  window.addEventListener('scroll', function () {
+    const y = window.scrollY;
+    navbar.classList.toggle('scrolled', y > 20);
+    backTop.classList.toggle('visible', y > 400);
+    lastScroll = y;
+  }, { passive: true });
+
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ── Mobile Menu ── */
+  const menuBtn  = document.getElementById('menuBtn');
+  const menuClose = document.getElementById('menuClose');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  function openMenu() {
+    mobileMenu.classList.add('open');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  menuBtn.addEventListener('click', openMenu);
+  menuClose.addEventListener('click', closeMenu);
+  mobileLinks.forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  /* ── Scroll reveal ── */
+  var revealEls = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(function (el) { observer.observe(el); });
+
+  /* ── Contact Form — client-side validation & sanitize ── */
+  var form = document.getElementById('contactForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var successMsg = document.getElementById('formSuccess');
+
+  /* Sanitize: strip any HTML tags from string input */
+  function sanitizeText(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+      .replace(/\//g, '&#x2F;');
+  }
+
+  function isValidEmail(email) {
+    /* RFC 5322 simplified pattern */
+    return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email);
+  }
+
+  function isValidPhone(phone) {
+    if (!phone) return true; /* Optional field */
+    return /^[\d\s\-\+\(\)]{7,20}$/.test(phone);
+  }
+
+  function setFieldError(inputEl, msg) {
+    inputEl.style.borderColor = '#FF4D6A';
+    var existing = inputEl.parentNode.querySelector('.field-error');
+    if (existing) existing.remove();
+    var err = document.createElement('span');
+    err.className = 'field-error';
+    err.style.cssText = 'color:#FF4D6A;font-size:0.78rem;margin-top:4px;display:block;';
+    err.setAttribute('role', 'alert');
+    err.textContent = msg;
+    inputEl.parentNode.appendChild(err);
+  }
+
+  function clearFieldError(inputEl) {
+    inputEl.style.borderColor = '';
+    var existing = inputEl.parentNode.querySelector('.field-error');
+    if (existing) existing.remove();
+  }
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var firstName = document.getElementById('firstName');
+      var lastName  = document.getElementById('lastName');
+      var emailFld  = document.getElementById('email');
+      var phoneFld  = document.getElementById('phone');
+      var serviceFld = document.getElementById('service');
+      var messageFld = document.getElementById('message');
+      var valid = true;
+
+      /* Clear previous errors */
+      [firstName, lastName, emailFld, phoneFld, serviceFld, messageFld].forEach(clearFieldError);
+
+      if (!firstName.value.trim() || firstName.value.trim().length < 2) {
+        setFieldError(firstName, 'Please enter your first name (min 2 characters).');
+        valid = false;
+      }
+      if (!lastName.value.trim() || lastName.value.trim().length < 2) {
+        setFieldError(lastName, 'Please enter your last name (min 2 characters).');
+        valid = false;
+      }
+      if (!isValidEmail(emailFld.value.trim())) {
+        setFieldError(emailFld, 'Please enter a valid email address.');
+        valid = false;
+      }
+      if (!isValidPhone(phoneFld.value.trim())) {
+        setFieldError(phoneFld, 'Please enter a valid phone number.');
+        valid = false;
+      }
+      if (!serviceFld.value) {
+        setFieldError(serviceFld, 'Please select a service.');
+        valid = false;
+      }
+      if (!messageFld.value.trim() || messageFld.value.trim().length < 20) {
+        setFieldError(messageFld, 'Please enter a message of at least 20 characters.');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      /* Sanitize all fields before "sending" */
+      var payload = {
+        firstName: sanitizeText(firstName.value.trim()),
+        lastName:  sanitizeText(lastName.value.trim()),
+        email:     sanitizeText(emailFld.value.trim()),
+        phone:     sanitizeText(phoneFld.value.trim()),
+        service:   sanitizeText(serviceFld.value),
+        message:   sanitizeText(messageFld.value.trim())
+      };
+
+      /* Disable submit button to prevent double-submit */
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      /*
+       * PRODUCTION NOTE:
+       * Replace this timeout with an actual fetch() to your backend API / AWS API Gateway endpoint.
+       *
+       * fetch('/api/contact', {
+       *   method: 'POST',
+       *   headers: { 'Content-Type': 'application/json' },
+       *   body: JSON.stringify(payload)
+       * }).then(...).catch(...);
+       */
+      setTimeout(function () {
+        form.style.display = 'none';
+        successMsg.style.display = 'block';
+      }, 1200);
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>

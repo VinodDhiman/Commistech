@@ -1,0 +1,210 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Commis Tech Website Infrastructure
+  - S3 bucket (private, encrypted, versioned)
+  - CloudFront distribution with OAC
+  - Security: HTTPS only, security headers via CloudFront response headers policy
+  - WAF WebACL (optional, uncomment to enable)
+
+Parameters:
+  DomainName:
+    Type: String
+    Default: commistech.com
+    Description: Primary domain name for the website
+
+  BucketName:
+    Type: String
+    Default: commistech-website-prod
+    Description: Globally unique S3 bucket name
+
+  AcmCertificateArn:
+    Type: String
+    Default: ""
+    Description: >
+      ARN of ACM certificate in us-east-1 for HTTPS.
+      Leave empty to use CloudFront default certificate.
+      Create with: aws acm request-certificate --domain-name commistech.com --validation-method DNS --region us-east-1
+
+Conditions:
+  HasCertificate: !Not [!Equals [!Ref AcmCertificateArn, ""]]
+
+Resources:
+
+  # ─── S3 BUCKET ─────────────────────────────────────────
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls:       true
+        BlockPublicPolicy:     true
+        IgnorePublicAcls:      true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldVersions
+            Status: Enabled
+            NoncurrentVersionExpirationInDays: 30
+      Tags:
+        - Key: Project
+          Value: CommistechWebsite
+        - Key: Environment
+          Value: Production
+
+  # ─── CLOUDFRONT OAC ────────────────────────────────────
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: commistech-oac
+        Description: OAC for Commis Tech website S3 bucket
+        SigningProtocol: sigv4
+        SigningBehavior: always
+        OriginAccessControlOriginType: s3
+
+  # ─── CLOUDFRONT RESPONSE HEADERS POLICY ───────────────
+  SecurityHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: CommistechSecurityHeaders
+        SecurityHeadersConfig:
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 63072000
+            IncludeSubdomains: true
+            Preload: true
+            Override: true
+          ContentTypeOptions:
+            Override: true
+          FrameOptions:
+            FrameOption: DENY
+            Override: true
+          XSSProtection:
+            Protection: true
+            ModeBlock: true
+            Override: true
+          ReferrerPolicy:
+            ReferrerPolicy: strict-origin-when-cross-origin
+            Override: true
+          ContentSecurityPolicy:
+            ContentSecurityPolicy: >
+              default-src 'self';
+              script-src 'self' 'nonce-CT2026x9z';
+              style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+              font-src 'self' https://fonts.gstatic.com;
+              img-src 'self' data: https:;
+              connect-src 'self';
+              frame-ancestors 'none';
+              base-uri 'self';
+              form-action 'self';
+            Override: true
+
+  # ─── CLOUDFRONT DISTRIBUTION ───────────────────────────
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: Commis Tech Website
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: PriceClass_100
+
+        Origins:
+          - Id: S3Origin
+            DomainName: !Sub "${BucketName}.s3.${AWS::Region}.amazonaws.com"
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+            OriginAccessControlId: !GetAtt CloudFrontOAC.Id
+
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          # CachingOptimized managed policy
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          ResponseHeadersPolicyId: !Ref SecurityHeadersPolicy
+          Compress: true
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+
+        # Aliases only when certificate is provided
+        Aliases: !If
+          - HasCertificate
+          - - !Ref DomainName
+            - !Sub "www.${DomainName}"
+          - !Ref AWS::NoValue
+
+        ViewerCertificate: !If
+          - HasCertificate
+          - AcmCertificateArn: !Ref AcmCertificateArn
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
+
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 300
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 300
+
+      Tags:
+        - Key: Project
+          Value: CommistechWebsite
+
+  # ─── S3 BUCKET POLICY (allows CloudFront OAC only) ─────
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipal
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "arn:aws:s3:::${BucketName}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
+
+# ─── OUTPUTS ───────────────────────────────────────────────
+Outputs:
+  WebsiteURL:
+    Description: CloudFront distribution URL (use until custom domain is configured)
+    Value: !Sub "https://${CloudFrontDistribution.DomainName}"
+
+  CloudFrontDistributionId:
+    Description: CloudFront Distribution ID (needed for cache invalidations)
+    Value: !Ref CloudFrontDistribution
+
+  CloudFrontDomainName:
+    Description: CloudFront domain — set as CNAME for your custom domain
+    Value: !GetAtt CloudFrontDistribution.DomainName
+
+  S3BucketName:
+    Description: S3 Bucket for website files
+    Value: !Ref WebsiteBucket
+
+  DeployCommand:
+    Description: Command to deploy/update files
+    Value: !Sub >
+      aws s3 sync . s3://${BucketName}/ --delete &&
+      aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
